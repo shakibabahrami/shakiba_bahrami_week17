@@ -1,0 +1,39 @@
+.sidebarButtons {
+  /* background-color: aqua; */
+  position: absolute;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  top: 285px;
+  left: 0px;
+  align-items: center;
+}
+.sidebarButtons button {
+  width: 90%;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  height: 40px;
+}
+
+.sidebarButtons button:hover {
+  width: 101%;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.sidebarButtons input {
+  text-align: center;
+  border: 2px solid #83497b;
+  width: 90%;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  height: 40px;
+  font-size: 1rem;
+  font-style: bold;
+}
+.sidebarButtons input:hover {
+}
+.founded{
+  color: #83497b;
+  font-size: 1rem;
+  text-align: center;
+}
