@@ -1,50 +1,18 @@
-import React from "react";
-import { useState } from "react";
-import Styles from "./Contacts.module.css";
-import { v4 } from "uuid";
+import { useContext } from "react";
+import { ContactsContext } from "../context/contact/ContactContext.jsx";
+import {
+  ADD,
+  EDIT,
+  // SET_CONTACT_FIELD,
+  // SET_ALERT,
+  // CLEAR_ALERT,
+} from "../context/contact/actionTypes";
 
-function Contacts({
-  contacts,
-  setContacts,
-  changeHandler,
-  alert,
-  setAlert,
-  alertType,
-  setAlertType,
-  contact,
-  setContact,
-  editing,
-  setEditing,
-  nameInput,
-  setNameInput,
-  lastNameInput,
-  emailInput,
-  phoneInput,
-  setLastNameInput,
-  setEmailInput,
-  setPhoneInput,
-}) {
-  const inputs = [
-    { class: nameInput, type: "text", name: "name", placeholder: "Name" },
-    {
-      class: lastNameInput,
-      type: "text",
-      name: "lastName",
-      placeholder: "Last Name",
-    },
-    {
-      class: emailInput,
-      type: "email",
-      name: "email",
-      placeholder: "Email",
-    },
-    {
-      class: phoneInput,
-      type: "number",
-      name: "phone",
-      placeholder: "Phone",
-    },
-  ];
+import Styles from "./Contacts.module.css";
+
+const Contacts = () => {
+  const { state, dispatch } = useContext(ContactsContext);
+  const { contact, editing, alert, alertType } = state;
 
   const validation = () => {
     if (!contact.name.trim()) return "Name is required!!";
@@ -54,101 +22,62 @@ function Contacts({
     return "";
   };
 
+  const handleChange = (e) => {
+    dispatch({
+      type: SET_CONTACT_FIELD,
+      field: e.target.name,
+      value: e.target.value,
+    });
+  };
+
   const addHandler = () => {
     const error = validation();
     if (error) {
-      setAlert(error);
-      setAlertType(false);
+      dispatch({ type: SET_ALERT, msg: error, alertType: false });
       return;
     }
 
-    if (
-      !contact.name ||
-      !contact.lastName ||
-      !contact.email ||
-      !contact.phone
-    ) {
-      setAlert("Please Enter Valid Data!");
-      setAlertType(false);
-      setTimeout(() => {
-        setAlert("");
-      }, 3000);
-      return;
-    }
-    const newContact = { ...contact, id: v4() };
-    setContacts((contacts) => [...contacts, newContact]);
-    setContact({
-      id: "",
-      name: "",
-      lastName: "",
-      email: "",
-      phone: "",
-    });
-    setAlert("contact added successfully!!");
-    setAlertType(true);
-    setTimeout(() => {
-      setAlert("");
-    }, 3000);
+    dispatch({ type: ADD });
+
+    setTimeout(() => dispatch({ type: CLEAR_ALERT }), 3000);
   };
 
-  const changeEditHandler = (event) => {
-
-    
-
-    const { name, value } = event.target;
-    setContact((contact) => ({ ...contact, [name]: value }));
-    if (name === "name") setNameInput(value);
-    if (name === "lastName") setLastNameInput(value);
-    if (name === "email") setEmailInput(value);
-    if (name === "phone") setPhoneInput(value);
-  };
   const saveEditedHandler = () => {
-    
     const error = validation();
     if (error) {
-      setAlert(error);
-      setAlertType(false);
+      dispatch({ type: SET_ALERT, msg: error, alertType: false });
       return;
     }
 
-    const editedContacts = contacts.map((c) =>
-      c.id === contact.id ? contact : c
-    );
-    setContacts(editedContacts);
-    setNameInput("");
-    setLastNameInput("");
-    setEmailInput("");
-    setPhoneInput("");
-    setEditing(false);
-    setContact({
-      id: "",
-      name: "",
-      lastName: "",
-      email: "",
-      phone: "",
-    });
-    setAlert("contact edited successfully!");
-    setAlertType(true);
-    setTimeout(() => {
-      setAlert("");
-    }, 3000);
+    dispatch({ type: EDIT });
+    setTimeout(() => dispatch({ type: CLEAR_ALERT }), 3000);
   };
+
+  const inputs = [
+    { name: "name", placeholder: "Name", type: "text" },
+    { name: "lastName", placeholder: "Last Name", type: "text" },
+    { name: "email", placeholder: "Email", type: "email" },
+    { name: "phone", placeholder: "Phone", type: "number" },
+  ];
+
   return (
     <>
       <div className={Styles.container}>
         <h3 className={Styles.header}>Add New Contact</h3>
+
         <div className={Styles.inputs}>
-          {inputs.map((input, index) => (
+          {inputs.map((input) => (
             <input
-              key={index}
+              key={input.name}
               className={Styles.input}
-              type={input.type}
               name={input.name}
+              type={input.type}
               placeholder={input.placeholder}
               value={contact[input.name]}
-              onChange={changeEditHandler}
+              onChange={handleChange}
             />
           ))}
+
           {editing ? (
             <button onClick={saveEditedHandler}>Edit</button>
           ) : (
@@ -156,6 +85,7 @@ function Contacts({
           )}
         </div>
       </div>
+
       <div
         className={`${Styles.alert} ${
           alertType ? Styles.successAlert : Styles.failedAlert
@@ -165,6 +95,6 @@ function Contacts({
       </div>
     </>
   );
-}
+};
 
 export default Contacts;

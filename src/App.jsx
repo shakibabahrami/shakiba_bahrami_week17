@@ -1,137 +1,57 @@
+import { useContext } from "react";
+import { ContactsContext } from "./context/contact/ContactContext.jsx";
 import Contacts from "./components/Contacts";
 import ContactsList from "./components/ContactsList";
 import SidebarMenu from "./components/SidebarMenu";
 import Modal from "./components/Modal";
 
-import { useState } from "react";
-import Styles from "./components/App.module.css";
-
-const contactsData = JSON.parse(localStorage.getItem("data")) || [];
-
 function App() {
-  // const [contacts, setContacts] = useState(contactsData);
-  // const [editing, setEditing] = useState(false);
-  // const [showCheckbox, setShowCheckbox] = useState(false);
-  // const [selectedArray, setSelectedArray] = useState([]);
-  // const [alert, setAlert] = useState("");
-  // const [alertType, setAlertType] = useState(true);
-  // const [nameInput, setNameInput] = useState(contacts.name);
-  // const [lastNameInput, setLastNameInput] = useState(contacts.lastName);
-  // const [emailInput, setEmailInput] = useState(contacts.email);
-  // const [phoneInput, setPhoneInput] = useState(contacts.phone);
-  // const [isSearching, setIsSearching] = useState(false);
-  // const [isModalOpen, setIsModalOpen] = useState(false);
-  // const [modalTitle, setModalTitle] = useState("");
-  // const [modalContent, setModalContent] = useState("");
+  const { state, dispatch } = useContext(ContactsContext);
 
-  // const [contact, setContact] = useState({
-  //   name: "",
-  //   lastName: "",
-  //   email: "",
-  //   phone: "",
-  // });
-
-  localStorage.setItem("data", JSON.stringify(contacts));
+  const changeHandler = (e) => {
+    const { name, value } = e.target;
+    dispatch({ type: "SET_CONTACT", payload: { ...state.contact, [name]: value } });
+  };
 
   const deleteButton = () => {
-    setShowCheckbox((value) => !value);
-    setAlert("please select contacts that you want to delete together");
-    setAlertType(true);
+    dispatch({ type: "TOGGLE_CHECKBOX" });
+    dispatch({ type: "SET_ALERT", payload: { alert: "Select contacts to delete", type: true } });
     setTimeout(() => {
-      setAlert("");
+      dispatch({ type: "SET_ALERT", payload: { alert: "", type: true } });
     }, 3000);
   };
 
-  const changeHandler = (event) => {
-    const name = event.target.name;
-    const value = event.target.value;
-    setContact((contact) => ({ ...contact, [name]: value }));
-  };
-
   return (
-    <div className={Styles.container}>
+    <div>
       <Modal
-        isOpen={isModalOpen}
-        title={modalTitle}
-        onClose={() => setIsModalOpen(false)}
+        isOpen={state.modal.isOpen}
+        title={state.modal.title}
+        onClose={() => dispatch({ type: "SET_MODAL", payload: { isOpen: false, title: "", content: "" } })}
       >
-        {modalContent}
+        {state.modal.content}
       </Modal>
-      <div className={Styles.leftSideContainer}>
-        {/* <p>{isModalOpen ? "Modal is open ✅" : "Modal is closed ❌"}</p> */}
 
-        <Contacts
-          contacts={contacts}
-          setContacts={setContacts}
-          changeHandler={changeHandler}
-          alert={alert}
-          setAlert={setAlert}
-          alertType={alertType}
-          setAlertType={setAlertType}
-          contact={contact}
-          setContact={setContact}
-          editing={editing}
-          setEditing={setEditing}
-          nameInput={nameInput}
-          setNameInput={setNameInput}
-          lastNameInput={lastNameInput}
-          emailInput={emailInput}
-          phoneInput={phoneInput}
-          setLastNameInput={setLastNameInput}
-          setEmailInput={setEmailInput}
-          setPhoneInput={setPhoneInput}
-        />
-        {contacts.length ? (
-          <ContactsList
-            contacts={contacts}
-            setContacts={setContacts}
-            showCheckbox={showCheckbox}
-            setSelectedArray={setSelectedArray}
-            selectedArray={selectedArray}
-            changeHandler={changeHandler}
-            editing={editing}
-            setEditing={setEditing}
-            nameInput={nameInput}
-            setNameInput={setNameInput}
-            setLastNameInput={setLastNameInput}
-            setEmailInput={setEmailInput}
-            setPhoneInput={setPhoneInput}
-            setContact={setContact}
-            isSearching={isSearching}
-            setIsSearching={setIsSearching}
-            isModalOpen={isModalOpen}
-            setIsModalOpen={setIsModalOpen}
-            modalTitle={modalTitle}
-            setModalTitle={setModalTitle}
-            modalContent={modalContent}
-            setModalContent={setModalContent}
-            setAlert={setAlert}
-            alertType={alertType}
-            setAlertType={setAlertType}
-          />
-        ) : (
-          <>
-            <h3 className={Styles.header}>Contacts List</h3>
-            <p className={Styles.nothingAdded}>No Contacts Added yet!</p>
-          </>
-        )}
-      </div>
+      <Contacts
+        contacts={state.contacts}
+        contact={state.contact}
+        changeHandler={changeHandler}
+        dispatch={dispatch}
+        alert={state.alert}
+        alertType={state.alertType}
+        editing={state.editing}
+      />
+
+      <ContactsList
+        contacts={state.contacts}
+        dispatch={dispatch}
+        showCheckbox={state.showCheckbox}
+        selectedArray={state.selectedArray}
+      />
+
       <SidebarMenu
-        className={Styles.sidebar}
-        contacts={contacts}
-        setContacts={setContacts}
         deleteButton={deleteButton}
-        showCheckbox={showCheckbox}
-        selectedArray={selectedArray}
-        isSearching={isSearching}
-        setIsSearching={setIsSearching}
-        isModalOpen={isModalOpen}
-        setIsModalOpen={setIsModalOpen}
-        modalTitle={modalTitle}
-        setModalTitle={setModalTitle}
-        modalContent={modalContent}
-        setModalContent={setModalContent}
-        setShowCheckbox={setShowCheckbox}
+        showCheckbox={state.showCheckbox}
+        selectedArray={state.selectedArray}
       />
     </div>
   );

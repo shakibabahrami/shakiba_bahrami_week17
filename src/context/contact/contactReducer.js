@@ -1,28 +1,42 @@
-const reducer = (state, action) => {
+import { ADD, DELETE, EDIT, SET_ALERT, TOGGLE_CHECKBOX, SET_MODAL, SET_CONTACT } from "./actionTypes";
+
+const contactsReducer = (state, action) => {
   switch (action.type) {
-    case "SETDATA":
-      return action.payload || state;
-    case "ADD":
-      const newStateAdd = [...state, action.payload];
-      localStorage.setItem("data", JSON.stringify(newStateAdd));
-      return newStateAdd;
+    case ADD:
+      return { ...state, contacts: [...state.contacts, action.payload] };
 
-    case "DELETE":
-      const newStateDelete = state.filter(
-        (item, index) => item.id !== action.payload
-      );
-      localStorage.setItem("data", JSON.stringify(newStateDelete));
-      return newStateDelete;
+    case DELETE:
+      return {
+        ...state,
+        contacts: state.contacts.filter((c) => !action.payload.includes(c.id)),
+        selectedArray: [],
+      };
 
-    case "EDIT":
-      const { id, contact } = action.payload;
-      const newStateEdit = state.map((item) =>
-        item.id === id ? contact : item
-      );
-      localStorage.setItem("data", JSON.stringify(newStateEdit));
-      return newStateEdit;
+    case EDIT:
+      return {
+        ...state,
+        contacts: state.contacts.map((c) =>
+          c.id === action.payload.id ? action.payload.contact : c
+        ),
+        contact: { name: "", lastName: "", email: "", phone: "" },
+        editing: false,
+      };
+
+    case SET_CONTACT:
+      return { ...state, contact: action.payload };
+
+    case SET_ALERT:
+      return { ...state, alert: action.payload.alert, alertType: action.payload.type };
+
+    case TOGGLE_CHECKBOX:
+      return { ...state, showCheckbox: !state.showCheckbox };
+
+    case SET_MODAL:
+      return { ...state, modal: action.payload };
 
     default:
-      throw new Error("invalid action");
+      return state;
   }
 };
+
+export default contactsReducer;
