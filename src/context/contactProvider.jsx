@@ -1,6 +1,6 @@
 import { useReducer } from "react";
 
-import { ContactsContext } from "./contact/ContactContext";
+import { ContactsContext } from "./ContactContext";
 
 const initialState = [];
 

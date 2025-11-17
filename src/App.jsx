@@ -9,27 +9,27 @@ import Styles from "./components/App.module.css";
 const contactsData = JSON.parse(localStorage.getItem("data")) || [];
 
 function App() {
-  const [contacts, setContacts] = useState(contactsData);
-  const [editing, setEditing] = useState(false);
-  const [showCheckbox, setShowCheckbox] = useState(false);
-  const [selectedArray, setSelectedArray] = useState([]);
-  const [alert, setAlert] = useState("");
-  const [alertType, setAlertType] = useState(true);
-  const [nameInput, setNameInput] = useState(contacts.name);
-  const [lastNameInput, setLastNameInput] = useState(contacts.lastName);
-  const [emailInput, setEmailInput] = useState(contacts.email);
-  const [phoneInput, setPhoneInput] = useState(contacts.phone);
-  const [isSearching, setIsSearching] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalTitle, setModalTitle] = useState("");
-  const [modalContent, setModalContent] = useState("");
+  // const [contacts, setContacts] = useState(contactsData);
+  // const [editing, setEditing] = useState(false);
+  // const [showCheckbox, setShowCheckbox] = useState(false);
+  // const [selectedArray, setSelectedArray] = useState([]);
+  // const [alert, setAlert] = useState("");
+  // const [alertType, setAlertType] = useState(true);
+  // const [nameInput, setNameInput] = useState(contacts.name);
+  // const [lastNameInput, setLastNameInput] = useState(contacts.lastName);
+  // const [emailInput, setEmailInput] = useState(contacts.email);
+  // const [phoneInput, setPhoneInput] = useState(contacts.phone);
+  // const [isSearching, setIsSearching] = useState(false);
+  // const [isModalOpen, setIsModalOpen] = useState(false);
+  // const [modalTitle, setModalTitle] = useState("");
+  // const [modalContent, setModalContent] = useState("");
 
-  const [contact, setContact] = useState({
-    name: "",
-    lastName: "",
-    email: "",
-    phone: "",
-  });
+  // const [contact, setContact] = useState({
+  //   name: "",
+  //   lastName: "",
+  //   email: "",
+  //   phone: "",
+  // });
 
   localStorage.setItem("data", JSON.stringify(contacts));
 
