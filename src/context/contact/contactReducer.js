@@ -6,6 +6,8 @@ const contactsReducer = (state, action) => {
       return { ...state, contacts: [...state.contacts, action.payload] };
 
     case DELETE:
+      console.log(action);
+      
       return {
         ...state,
         contacts: state.contacts.filter((c) => !action.payload.includes(c.id)),

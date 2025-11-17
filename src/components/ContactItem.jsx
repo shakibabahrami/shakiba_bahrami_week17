@@ -129,7 +129,7 @@ function ContactItem({
         <span>📧</span>
         {email}
       </p>
-      <span className={Styles.delete} onClick={() => deleteHandler(id)}>
+      <span className={Styles.delete} onClick={()=>{dispatchEvent({type: "DELETE",payload:contact.id})}}>
         🗑️
       </span>
       <span className={Styles.edit} onClick={() => editHandler(id)}>

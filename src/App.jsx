@@ -18,20 +18,20 @@ function App() {
     });
   };
 
-  const deleteButton = () => {
-    dispatch({ type: "TOGGLE_CHECKBOX" });
-    dispatch({
-      type: "SET_ALERT",
-      payload: { alert: "Select contacts to delete", type: true },
-    });
-    setTimeout(() => {
-      dispatch({ type: "SET_ALERT", payload: { alert: "", type: true } });
-    }, 3000);
-  };
+  // const deleteButton = () => {
+  //   dispatch({ type: "TOGGLE_CHECKBOX" });
+  //   dispatch({
+  //     type: "SET_ALERT",
+  //     payload: { alert: "Select contacts to delete", type: true },
+  //   });
+  //   setTimeout(() => {
+  //     dispatch({ type: "SET_ALERT", payload: { alert: "", type: true } });
+  //   }, 3000);
+  // };
 
   return (
     <div className={Styles.container}>
-      <Modal
+      {/* <Modal
         isOpen={state.modal.isOpen}
         title={state.modal.title}
         onClose={() =>
@@ -42,18 +42,18 @@ function App() {
         }
       >
         {state.modal.content}
-      </Modal>
+      </Modal> */}
 
       <div className={Styles.leftSideContainer}>
         <Contacts
         contacts={state.contacts}
         contact={state.contact}
-        changeHandler={changeHandler}
+        // changeHandler={changeHandler}
         dispatch={dispatch}
         alert={state.alert}
         alertType={state.alertType}
         editing={state.editing}
-        // className={Styles.Contacts}
+        className={Styles.Contacts}
       />
 
       <ContactsList
@@ -64,11 +64,11 @@ function App() {
       />
       </div>
 
-      <SidebarMenu
+      {/* <SidebarMenu
         deleteButton={deleteButton}
         showCheckbox={state.showCheckbox}
         selectedArray={state.selectedArray}
-      />
+      /> */}
     </div>
   );
 }
